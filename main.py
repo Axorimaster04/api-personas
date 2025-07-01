@@ -29,13 +29,31 @@ def get_echo_test():
 # Get all employees
 @app.get("/personas")
 def get_personas():
-    mydb = mysql.connector.connect(host=host_name, port=port_number, user=user_name, password=password_db, database=database_name)  
-    cursor = mydb.cursor()
-    cursor.execute("SELECT * FROM persona")
-    result = cursor.fetchall()
-    cursor.close()
-    mydb.close()
-    return {"employees": result}
+    try:
+        # Connect to the database
+        mydb = mysql.connector.connect(
+            host=host_name,
+            port=port_number,
+            user=user_name,
+            password=password_db,
+            database=database_name
+        )
+
+        cursor = mydb.cursor()
+        cursor.execute("SELECT * FROM persona")
+        result = cursor.fetchall()
+        cursor.close()
+        mydb.close()
+
+        return {"employees": result}
+
+    except Error as e:
+        # Catch database-related errors
+        raise HTTPException(status_code=500, detail=f"MySQL Error: {e}")
+
+    except Exception as e:
+        # Catch any other errors
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 # Get an employee by ID
 @app.get("/personas/{id}")
