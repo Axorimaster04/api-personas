@@ -8,7 +8,7 @@ app = FastAPI()
 origins = ['*'] # Permite que el Api Rest se consuma desde cualquier origen
 
 app.add_middleware(
-    get,
+    CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
