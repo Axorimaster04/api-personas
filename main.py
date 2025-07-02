@@ -71,7 +71,7 @@ def get_persona(codigo_persona: int):
 def get_polizas(codigo_persona: int):
     mydb = mysql.connector.connect(host=host_name, port=port_number, user=user_name, password=password_db, database=database_name)  
     cursor = mydb.cursor()
-    cursor.execute(f"SELECT * FROM polzias WHERE codigoPersona = {codigo_persona}")
+    cursor.execute(f"SELECT * FROM polizas WHERE codigoPersona = {codigo_persona}")
     result = cursor.fetchone()
     cursor.close()
     mydb.close()
