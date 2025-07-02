@@ -111,5 +111,3 @@ def delete_employee(codigo_persona: int):
     mydb.close()
     return {"message": "Employee deleted successfully"}
 
-get_personas()
-
