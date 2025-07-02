@@ -66,6 +66,17 @@ def get_persona(codigo_persona: int):
     mydb.close()
     return {"persona": result}
 
+# Get an poliza by persona ID
+@app.get("/polizas/{id}")
+def get_polizas(codigo_persona: int):
+    mydb = mysql.connector.connect(host=host_name, port=port_number, user=user_name, password=password_db, database=database_name)  
+    cursor = mydb.cursor()
+    cursor.execute(f"SELECT * FROM polzias WHERE codigoPersona = {codigo_persona}")
+    result = cursor.fetchone()
+    cursor.close()
+    mydb.close()
+    return {"polizas": result}
+
 # Add a new employee
 @app.post("/personas")
 def add_persona(item:schemas.Persona):
