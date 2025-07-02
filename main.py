@@ -8,7 +8,7 @@ app = FastAPI()
 origins = ['*'] # Permite que el Api Rest se consuma desde cualquier origen
 
 app.add_middleware(
-    CORSMiddleware,
+    get,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
@@ -110,3 +110,6 @@ def delete_employee(codigo_persona: int):
     cursor.close()
     mydb.close()
     return {"message": "Employee deleted successfully"}
+
+get_personas()
+
