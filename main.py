@@ -67,12 +67,23 @@ def get_persona(codigo_persona: int):
     return {"persona": result}
 
 # Get an poliza by persona ID
-@app.get("/polizas/{id}")
+@app.get("/polizas_persona/{id}")
 def get_polizas(codigo_persona: int):
     mydb = mysql.connector.connect(host=host_name, port=port_number, user=user_name, password=password_db, database=database_name)  
     cursor = mydb.cursor()
     cursor.execute(f"SELECT * FROM polizas WHERE codigoPersona = {codigo_persona}")
     result = cursor.fetchall()
+    cursor.close()
+    mydb.close()
+    return {"polizas": result}
+
+# Get an poliza by persona ID
+@app.get("/polizas/{id}")
+def get_polizas(codigo_poliza: int):
+    mydb = mysql.connector.connect(host=host_name, port=port_number, user=user_name, password=password_db, database=database_name)  
+    cursor = mydb.cursor()
+    cursor.execute(f"SELECT * FROM polizas WHERE codigoPoliza = {codigo_poliza}")
+    result = cursor.fetchone()
     cursor.close()
     mydb.close()
     return {"polizas": result}
@@ -88,13 +99,41 @@ def add_persona(item:schemas.Persona):
     pais_procedencia = item.pais_procedencia
 
     cursor = mydb.cursor()
-    sql = "INSERT INTO persona (tipo_persona, indicador_lista_negra, necionalidad, pais_procedencia) VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO persona (tipo_persona, indicador_lista_negra, nacionalidad, pais_procedencia) VALUES (%s, %s, %s, %s)"
     val = (tipo_persona, indicador_lista_negra, nacionalidad, pais_procedencia)
     cursor.execute(sql, val)
     mydb.commit()
     cursor.close()
     mydb.close()
     return {"message": "Persona added successfully"}
+
+# Add a new poliza
+@app.post("/polizas")
+def add_persona(item:schemas.Poliza):
+    mydb = mysql.connector.connect(host=host_name, port=port_number, user=user_name, password=password_db, database=database_name)
+
+    codigo_persona = item.codigo_persona
+    codigo_poliza = item.codigo_poliza
+    numero_poliza = item.numero_poliza
+    nombre_producto = item.nombre_producto
+    desc_producto = item.desc_producto
+    cat_producto = item.cat_producto
+
+
+    cursor = mydb.cursor()
+    sql = ("INSERT INTO polizas (codigoPersona, "
+           "codigoPoliza,"
+           "numeroPoliza, "
+           "nombreProducto,"
+           "descProducto,"
+           "catProducto) VALUES (%s, %s, %s, %s, %s, %s)")
+    val = (codigo_persona, codigo_poliza, numero_poliza, nombre_producto, desc_producto, cat_producto)
+    cursor.execute(sql, val)
+    mydb.commit()
+    cursor.close()
+    mydb.close()
+    return {"message": "Poliza added successfully"}
+
 
 # Modify an employee
 @app.put("/employees/{id}")
