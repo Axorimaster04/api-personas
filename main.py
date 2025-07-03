@@ -109,7 +109,7 @@ def add_persona(item:schemas.Persona):
 
 # Add a new poliza
 @app.post("/polizas")
-def add_persona(item:schemas.Poliza):
+def add_poliza(item:schemas.Poliza):
     mydb = mysql.connector.connect(host=host_name, port=port_number, user=user_name, password=password_db, database=database_name)
 
     codigo_persona = item.codigo_persona
